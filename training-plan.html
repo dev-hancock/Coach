@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5K Training Plan — Sub-15:00 Goal</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap');
+
+    :root {
+      --red: #e63946;
+      --dark: #0d0d0d;
+      --card: #161616;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --green: #2dc653;
+      --yellow: #f4a261;
+      --blue: #457b9d;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 40px 24px;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      border-left: 5px solid var(--red);
+      padding-left: 20px;
+      margin-bottom: 40px;
+    }
+    .header .label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--red);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      letter-spacing: 2px;
+      line-height: 1;
+      color: #fff;
+    }
+    .header .sub {
+      font-size: 16px;
+      color: var(--muted);
+      margin-top: 8px;
+      font-weight: 300;
+    }
+
+    /* Section titles */
+    .section-title {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--red);
+      font-weight: 600;
+      margin-bottom: 14px;
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Stat grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .stat-card .stat-label {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .stat-card .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .stat-card .stat-unit {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Split table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+    }
+    th {
+      background: #1e1e1e;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #1a1a1a; }
+    .summary-row td {
+      background: #1e1e1e;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    /* HR badges */
+    .hr-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .hr-z2 { background: #1a3a2a; color: var(--green); }
+    .hr-z3 { background: #3a2a10; color: var(--yellow); }
+    .hr-z4 { background: #3a1a1a; color: var(--red); }
+
+    /* Analysis boxes */
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .analysis-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .analysis-box h4 {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .analysis-box ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .analysis-box ul li {
+      font-size: 13px;
+      padding-left: 16px;
+      position: relative;
+      color: #ccc;
+    }
+    .analysis-box ul li::before {
+      position: absolute;
+      left: 0;
+    }
+    .strength-box { border-color: #1f3a2a; }
+    .strength-box h4 { color: var(--green); }
+    .strength-box ul li::before { content: '✓'; color: var(--green); }
+    .issue-box { border-color: #3a1a1a; }
+    .issue-box h4 { color: var(--red); }
+    .issue-box ul li::before { content: '!'; color: var(--red); font-weight: 700; }
+
+    /* Milestone timeline */
+    .milestones {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .milestone {
+      display: grid;
+      grid-template-columns: 120px 1fr 1fr;
+      align-items: center;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+    .milestone:last-child { border-bottom: none; }
+    .milestone.current { background: #1e1e1e; }
+    .milestone.target { background: #1a0a0a; border-color: #3a1a1a; }
+    .milestone .pace {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .milestone .phase { font-size: 12px; color: var(--muted); }
+    .milestone .timeframe { font-size: 12px; color: var(--muted); text-align: right; }
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .badge-now { background: #1f3a2a; color: var(--green); }
+    .badge-target { background: #3a1a1a; color: var(--red); }
+
+    /* Training weeks */
+    .week-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .week-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: #1a1a1a;
+      border-bottom: 1px solid var(--border);
+    }
+    .week-header h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: #fff;
+    }
+    .week-header .vol {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .week-header .vol span { color: var(--red); font-weight: 700; }
+    .day-row {
+      display: grid;
+      grid-template-columns: 90px 140px 1fr;
+      align-items: start;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+    .day-row:last-child { border-bottom: none; }
+    .day-name { font-weight: 600; font-size: 12px; color: #fff; }
+    .session-type {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .type-rest { color: var(--muted); }
+    .type-easy { color: var(--blue); }
+    .type-tempo { color: var(--yellow); }
+    .type-interval { color: var(--red); }
+    .type-long { color: var(--green); }
+    .type-trial { color: #c77dff; }
+    .type-strides { color: #48cae4; }
+    .day-detail { font-size: 13px; color: #aaa; }
+    .deload-banner {
+      background: #1a1a0a;
+      border-color: #3a3a10;
+    }
+    .deload-banner .week-header { background: #1e1e0a; border-color: #3a3a10; }
+
+    /* Pace reference */
+    .pace-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .pace-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .pace-chip .type {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .pace-chip .pace-val {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .pace-chip .pace-note { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+    /* Notes */
+    .notes {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .note {
+      display: flex;
+      gap: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      align-items: flex-start;
+    }
+    .note-num {
+      background: var(--red);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .note p { font-size: 13px; color: #bbb; }
+    .note strong { color: #fff; }
+
+    /* Footer */
+    .footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Print styles */
+    @media print {
+      body { background: #fff; color: #000; padding: 20px; }
+      :root {
+        --dark: #fff;
+        --card: #f5f5f5;
+        --border: #ddd;
+        --text: #111;
+        --muted: #666;
+        --red: #c0392b;
+        --green: #1a7a3a;
+        --yellow: #c07010;
+        --blue: #2a5a7a;
+      }
+      .header h1 { font-size: 36px; }
+      .week-card { page-break-inside: avoid; }
+      .analysis-grid { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="label">Personal Training Plan</div>
+    <h1>Sub-15:00 5K</h1>
+    <div class="sub">Phase 1 — Aerobic Base &nbsp;·&nbsp; 4 Weeks &nbsp;·&nbsp; Generated from Garmin Data</div>
+  </div>
+
+  <!-- Data Summary -->
+  <div class="section-title">Session Data</div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Distance</div>
+      <div class="stat-value">5.87</div>
+      <div class="stat-unit">kilometres</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Time</div>
+      <div class="stat-value">36:30</div>
+      <div class="stat-unit">mm:ss</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Avg Pace</div>
+      <div class="stat-value">6:09</div>
+      <div class="stat-unit">/km</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Avg HR</div>
+      <div class="stat-value">149</div>
+      <div class="stat-unit">bpm</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Max HR</div>
+      <div class="stat-value">178</div>
+      <div class="stat-unit">bpm</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Cadence</div>
+      <div class="stat-value">78</div>
+      <div class="stat-unit">spm</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Elevation</div>
+      <div class="stat-value">+108m</div>
+      <div class="stat-unit">-106m loss</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Temperature</div>
+      <div class="stat-value">28°C</div>
+      <div class="stat-unit">avg (peak 31°C)</div>
+    </div>
+  </div>
+
+  <!-- Splits table -->
+  <table>
+    <thead>
+      <tr>
+        <th>Split</th>
+        <th>Pace</th>
+        <th>Avg HR</th>
+        <th>Max HR</th>
+        <th>Cadence</th>
+        <th>Elev +/-</th>
+        <th>Zone</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td><td>6:14 /km</td><td>129</td><td>144</td><td>77</td><td>+9 / -18</td>
+        <td><span class="hr-badge hr-z2">Z2</span></td>
+      </tr>
+      <tr>
+        <td>2</td><td>6:16 /km</td><td>128</td><td>139</td><td>78</td><td>+19 / -24</td>
+        <td><span class="hr-badge hr-z2">Z2</span></td>
+      </tr>
+      <tr>
+        <td>3</td><td>6:05 /km</td><td>144</td><td>155</td><td>79</td><td>+7 / -30</td>
+        <td><span class="hr-badge hr-z3">Z3</span></td>
+      </tr>
+      <tr>
+        <td>4</td><td>6:28 /km</td><td>162</td><td>173</td><td>78</td><td>+28 / -7</td>
+        <td><span class="hr-badge hr-z4">Z4</span></td>
+      </tr>
+      <tr>
+        <td>5</td><td>6:17 /km</td><td>162</td><td>175</td><td>78</td><td>+30 / -18</td>
+        <td><span class="hr-badge hr-z4">Z4</span></td>
+      </tr>
+      <tr>
+        <td>6 (0.87km)</td><td>5:26 /km</td><td>173</td><td>178</td><td>78</td><td>+15 / -9</td>
+        <td><span class="hr-badge hr-z4">Z4</span></td>
+      </tr>
+      <tr class="summary-row">
+        <td>Summary</td><td>6:09 /km</td><td>149</td><td>178</td><td>78</td><td>+108 / -106</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Analysis -->
+  <div class="section-title">Performance Analysis</div>
+  <div class="analysis-grid">
+    <div class="analysis-box strength-box">
+      <h4>Strengths</h4>
+      <ul>
+        <li>Solid base — completed ~6km with 108m elevation</li>
+        <li>Pacing discipline in splits 1–3 (sub-6:20 consistently)</li>
+        <li>Cadence at 78 spm is near optimal range (78–83)</li>
+        <li>Finished strong with a faster final split</li>
+      </ul>
+    </div>
+    <div class="analysis-box issue-box">
+      <h4>Issues to Address</h4>
+      <ul>
+        <li>Severe HR drift — 128 bpm (split 2) → 162 bpm (split 4) at a slower pace</li>
+        <li>Splits 4–6 in Zone 4 — aerobic engine needs building</li>
+        <li>31°C heat inflating HR by ~5–10 bpm (train cooler when possible)</li>
+        <li>Cadence drops to 77 at start — maintain 78+ from gun</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Goal & Milestones -->
+  <div class="section-title">Goal Milestones — Road to Sub-15:00</div>
+  <div class="milestones">
+    <div class="milestone current">
+      <div><span class="badge badge-now">Now</span></div>
+      <div>
+        <div class="pace">~30:45 5K</div>
+        <div class="phase">6:09 /km · current fitness</div>
+      </div>
+      <div class="timeframe">Baseline</div>
+    </div>
+    <div class="milestone">
+      <div><span class="badge" style="background:#1a2a3a;color:#5ab4d4;">Phase 1</span></div>
+      <div>
+        <div class="pace">Sub-25:00</div>
+        <div class="phase">5:00 /km · aerobic base built</div>
+      </div>
+      <div class="timeframe">4–6 months</div>
+    </div>
+    <div class="milestone">
+      <div><span class="badge" style="background:#1a2a1a;color:#5ad45a;">Phase 2</span></div>
+      <div>
+        <div class="pace">Sub-22:00</div>
+        <div class="phase">4:24 /km · speed work integrated</div>
+      </div>
+      <div class="timeframe">9–12 months</div>
+    </div>
+    <div class="milestone">
+      <div><span class="badge" style="background:#2a1a1a;color:#d4a45a;">Phase 3</span></div>
+      <div>
+        <div class="pace">Sub-20:00</div>
+        <div class="phase">4:00 /km · advanced threshold work</div>
+      </div>
+      <div class="timeframe">18–24 months</div>
+    </div>
+    <div class="milestone target">
+      <div><span class="badge badge-target">Target</span></div>
+      <div>
+        <div class="pace" style="color:var(--red);">Sub-15:00</div>
+        <div class="phase">3:00 /km · elite level</div>
+      </div>
+      <div class="timeframe">5–8+ years</div>
+    </div>
+  </div>
+
+  <!-- Pace Reference -->
+  <div class="section-title">Training Pace Reference</div>
+  <div class="pace-grid">
+    <div class="pace-chip">
+      <div class="type">Easy / Zone 2</div>
+      <div class="pace-val" style="color:var(--blue);">7:00–7:45</div>
+      <div class="pace-note">/km · HR 120–135 · conversational</div>
+    </div>
+    <div class="pace-chip">
+      <div class="type">Tempo</div>
+      <div class="pace-val" style="color:var(--yellow);">5:45–6:00</div>
+      <div class="pace-note">/km · HR 155–165 · comfortably hard</div>
+    </div>
+    <div class="pace-chip">
+      <div class="type">Intervals</div>
+      <div class="pace-val" style="color:var(--red);">4:30–5:00</div>
+      <div class="pace-note">/km · hard effort · 1–2 min reps</div>
+    </div>
+    <div class="pace-chip">
+      <div class="type">Long Run</div>
+      <div class="pace-val" style="color:var(--green);">7:15–8:00</div>
+      <div class="pace-note">/km · fully conversational · flat</div>
+    </div>
+    <div class="pace-chip">
+      <div class="type">Strides</div>
+      <div class="pace-val" style="color:#48cae4;">20 sec</div>
+      <div class="pace-note">fast + controlled · full recovery between</div>
+    </div>
+    <div class="pace-chip">
+      <div class="type">5K Time Trial</div>
+      <div class="pace-val" style="color:#c77dff;">Max effort</div>
+      <div class="pace-note">Week 4 benchmark · flat course</div>
+    </div>
+  </div>
+
+  <!-- Training Plan -->
+  <div class="section-title">4-Week Training Plan</div>
+
+  <!-- Week 1 -->
+  <div class="week-card">
+    <div class="week-header">
+      <h3>Week 1 — Foundation</h3>
+      <div class="vol">Volume: <span>~18 km</span></div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Monday</div>
+      <div class="session-type type-rest">Rest</div>
+      <div class="day-detail">Active recovery — walk, stretch, or mobility work</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Tuesday</div>
+      <div class="session-type type-easy">Easy Run</div>
+      <div class="day-detail">4km @ 7:30/km · HR cap 135 · walk if HR spikes above threshold</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Wednesday</div>
+      <div class="session-type type-rest">Rest</div>
+      <div class="day-detail">—</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Thursday</div>
+      <div class="session-type type-tempo">Tempo Intervals</div>
+      <div class="day-detail">10 min easy warm-up → 4 × 4 min @ 5:50/km with 3 min walk/jog recovery → 10 min cool-down</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Friday</div>
+      <div class="session-type type-rest">Rest</div>
+      <div class="day-detail">—</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Saturday</div>
+      <div class="session-type type-long">Long Run</div>
+      <div class="day-detail">7km @ 7:30–8:00/km · fully conversational · flat route preferred</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Sunday</div>
+      <div class="session-type type-easy">Easy Run</div>
+      <div class="day-detail">3km @ 7:30/km · pure recovery pace · no HR pressure</div>
+    </div>
+  </div>
+
+  <!-- Week 2 -->
+  <div class="week-card">
+    <div class="week-header">
+      <h3>Week 2 — Build</h3>
+      <div class="vol">Volume: <span>~22 km</span></div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Monday</div>
+      <div class="session-type type-rest">Rest</div>
+      <div class="day-detail">—</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Tuesday</div>
+      <div class="session-type type-easy">Easy Run</div>
+      <div class="day-detail">5km @ 7:15/km · HR cap 135</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Wednesday</div>
+      <div class="session-type type-strides">Strides</div>
+      <div class="day-detail">3km easy + 6 × 20-sec strides at fast but controlled effort · full recovery between each</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Thursday</div>
+      <div class="session-type type-tempo">Tempo Run</div>
+      <div class="day-detail">10 min warm-up → 15 min continuous @ 6:00/km → 10 min cool-down</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Friday</div>
+      <div class="session-type type-rest">Rest</div>
+      <div class="day-detail">—</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Saturday</div>
+      <div class="session-type type-long">Long Run</div>
+      <div class="day-detail">8km @ 7:30/km · conversational throughout</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Sunday</div>
+      <div class="session-type type-rest">Rest or Jog</div>
+      <div class="day-detail">Optional 2km very easy jog or full rest</div>
+    </div>
+  </div>
+
+  <!-- Week 3 -->
+  <div class="week-card">
+    <div class="week-header">
+      <h3>Week 3 — Peak</h3>
+      <div class="vol">Volume: <span>~25 km</span></div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Monday</div>
+      <div class="session-type type-rest">Rest</div>
+      <div class="day-detail">—</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Tuesday</div>
+      <div class="session-type type-easy">Easy Run</div>
+      <div class="day-detail">5km @ 7:00/km</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Wednesday</div>
+      <div class="session-type type-rest">Rest</div>
+      <div class="day-detail">—</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Thursday</div>
+      <div class="session-type type-interval">Track Intervals</div>
+      <div class="day-detail">Warm-up → 6 × 800m @ 5:00/km with 90 sec recovery → cool-down</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Friday</div>
+      <div class="session-type type-easy">Easy Run</div>
+      <div class="day-detail">4km easy · shakeout before long run</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Saturday</div>
+      <div class="session-type type-long">Long Run</div>
+      <div class="day-detail">9km @ 7:30/km · longest run of the block</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Sunday</div>
+      <div class="session-type type-rest">Rest</div>
+      <div class="day-detail">Full rest — you've earned it</div>
+    </div>
+  </div>
+
+  <!-- Week 4 -->
+  <div class="week-card deload-banner">
+    <div class="week-header">
+      <h3>Week 4 — Deload + Time Trial</h3>
+      <div class="vol">Volume: <span>~15 km</span></div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Monday</div>
+      <div class="session-type type-rest">Rest</div>
+      <div class="day-detail">—</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Tuesday</div>
+      <div class="session-type type-easy">Easy Run</div>
+      <div class="day-detail">4km easy · legs should feel fresh</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Wednesday</div>
+      <div class="session-type type-rest">Rest</div>
+      <div class="day-detail">—</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Thursday</div>
+      <div class="session-type type-tempo">Light Tempo</div>
+      <div class="day-detail">10 min warm-up → 10 min @ 6:00/km → cool-down · keep it controlled</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Friday</div>
+      <div class="session-type type-rest">Rest</div>
+      <div class="day-detail">Full rest before time trial</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Saturday</div>
+      <div class="session-type type-trial">5K Time Trial</div>
+      <div class="day-detail">Run a flat 5K at maximum effort · this is your new fitness benchmark — share the result for Phase 2 planning</div>
+    </div>
+    <div class="day-row">
+      <div class="day-name">Sunday</div>
+      <div class="session-type type-rest">Rest</div>
+      <div class="day-detail">Recover and reflect</div>
+    </div>
+  </div>
+
+  <!-- Coaching Notes -->
+  <div class="section-title">Coaching Notes</div>
+  <div class="notes">
+    <div class="note">
+      <div class="note-num">1</div>
+      <p><strong>Run easy runs truly easy.</strong> The HR drift in your data shows you're working too hard on base days. If HR exceeds 135 on easy runs, slow down or walk — even if the pace feels embarrassingly slow. This is how the aerobic engine gets built.</p>
+    </div>
+    <div class="note">
+      <div class="note-num">2</div>
+      <p><strong>Heat management.</strong> Your session was recorded at 28–31°C which elevates HR by approximately 5–10 bpm. Add 20–30 sec/km to easy pace targets on hot days, or shift runs to early morning to get more accurate aerobic training data.</p>
+    </div>
+    <div class="note">
+      <div class="note-num">3</div>
+      <p><strong>Add more sessions to <code>/data/</code>.</strong> One run gives a snapshot, not a trend. Export each session from Garmin and drop the CSV in the data folder — the more files present, the more accurately the agent can track your HR trend, pacing progression, and cadence development over time.</p>
+    </div>
+    <div class="note">
+      <div class="note-num">4</div>
+      <p><strong>After the Week 4 time trial</strong>, share the result with the agent. Phase 2 will introduce longer tempo runs, fartlek sessions, and increased weekly volume calibrated to your updated fitness level.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>Generated by Personal Trainer Agent · Garmin data file: 477166196695793865.csv</span>
+    <span>Phase 1 of 5 · May 2026</span>
+  </div>
+
+</div>
+</body>
+</html>
