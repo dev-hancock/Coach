@@ -1,0 +1,94 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <Compile Remove="Features\Activities\Create\**" />
+    <Compile Remove="Features\Activities\Delete\**" />
+    <Compile Remove="Features\Activities\GetAll\**" />
+    <Compile Remove="Features\Activities\GetById\**" />
+    <Compile Remove="Features\Activities\Update\**" />
+    <Compile Remove="Features\Equipment\Create\**" />
+    <Compile Remove="Features\Equipment\Delete\**" />
+    <Compile Remove="Features\Equipment\GetAll\**" />
+    <Compile Remove="Features\Equipment\Update\**" />
+    <Compile Remove="Features\Goals\Delete\**" />
+    <Compile Remove="Features\Goals\GetAll\**" />
+    <Compile Remove="Features\Goals\GetById\**" />
+    <Compile Remove="Features\Goals\Update\**" />
+    <Compile Remove="Features\Training\**" />
+    <EmbeddedResource Remove="Features\Activities\Create\**" />
+    <EmbeddedResource Remove="Features\Activities\Delete\**" />
+    <EmbeddedResource Remove="Features\Activities\GetAll\**" />
+    <EmbeddedResource Remove="Features\Activities\GetById\**" />
+    <EmbeddedResource Remove="Features\Activities\Update\**" />
+    <EmbeddedResource Remove="Features\Equipment\Create\**" />
+    <EmbeddedResource Remove="Features\Equipment\Delete\**" />
+    <EmbeddedResource Remove="Features\Equipment\GetAll\**" />
+    <EmbeddedResource Remove="Features\Equipment\Update\**" />
+    <EmbeddedResource Remove="Features\Goals\Delete\**" />
+    <EmbeddedResource Remove="Features\Goals\GetAll\**" />
+    <EmbeddedResource Remove="Features\Goals\GetById\**" />
+    <EmbeddedResource Remove="Features\Goals\Update\**" />
+    <EmbeddedResource Remove="Features\Training\**" />
+    <None Remove="Features\Activities\Create\**" />
+    <None Remove="Features\Activities\Delete\**" />
+    <None Remove="Features\Activities\GetAll\**" />
+    <None Remove="Features\Activities\GetById\**" />
+    <None Remove="Features\Activities\Update\**" />
+    <None Remove="Features\Equipment\Create\**" />
+    <None Remove="Features\Equipment\Delete\**" />
+    <None Remove="Features\Equipment\GetAll\**" />
+    <None Remove="Features\Equipment\Update\**" />
+    <None Remove="Features\Goals\Delete\**" />
+    <None Remove="Features\Goals\GetAll\**" />
+    <None Remove="Features\Goals\GetById\**" />
+    <None Remove="Features\Goals\Update\**" />
+    <None Remove="Features\Training\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Coach.Domain\Coach.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.Specification" Version="9.3.1" />
+    <PackageReference Include="ErrorOr" Version="2.0.1" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="MediatR" Version="14.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Coaching\Create\" />
+    <Folder Include="Features\Coaching\Delete\" />
+    <Folder Include="Features\Coaching\GetAll\" />
+    <Folder Include="Features\Coaching\GetById\" />
+    <Folder Include="Features\Coaching\Update\" />
+    <Folder Include="Features\Fatigue\Create\" />
+    <Folder Include="Features\Fatigue\Delete\" />
+    <Folder Include="Features\Fatigue\GetAll\" />
+    <Folder Include="Features\Fatigue\GetById\" />
+    <Folder Include="Features\Fatigue\Update\" />
+    <Folder Include="Features\Health\Create\" />
+    <Folder Include="Features\Health\Delete\" />
+    <Folder Include="Features\Health\GetAll\" />
+    <Folder Include="Features\Health\GetById\" />
+    <Folder Include="Features\Health\Update\" />
+    <Folder Include="Features\Injuries\Create\" />
+    <Folder Include="Features\Injuries\Delete\" />
+    <Folder Include="Features\Injuries\GetAll\" />
+    <Folder Include="Features\Injuries\GetById\" />
+    <Folder Include="Features\Injuries\Update\" />
+    <Folder Include="Features\Recovery\Create\" />
+    <Folder Include="Features\Recovery\Delete\" />
+    <Folder Include="Features\Recovery\GetAll\" />
+    <Folder Include="Features\Recovery\GetById\" />
+    <Folder Include="Features\Recovery\Update\" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

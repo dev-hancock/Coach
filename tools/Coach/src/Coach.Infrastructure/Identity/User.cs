@@ -1,0 +1,16 @@
+﻿using Coach.Application.Abstractions.Identity;
+using Microsoft.AspNetCore.Identity;
+
+namespace Coach.Infrastructure.Identity;
+
+/// <summary>
+/// Application user with authentication information.
+/// Linked 1:1 to Athlete domain entity.
+/// </summary>
+public class User : IdentityUser<Guid>, IUser
+{
+    /// <summary>
+    /// Reference to the athlete profile for this user.
+    /// </summary>
+    public Guid AthleteId { get; set; }
+}
