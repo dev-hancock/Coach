@@ -14,12 +14,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.7" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.7" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="10.1.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Auth\Login\" />
+    <Folder Include="Integrations\Strava\Activities\Contracts\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

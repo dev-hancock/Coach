@@ -6,7 +6,7 @@ namespace Coach.Application.Features.Auth.Logout;
 
 public sealed record LogoutRequest : IRequest<ErrorOr<Success>>;
 
-internal sealed class LogoutHandler(IAuthenticationService auth)
+internal sealed class LogoutHandler(IAuthService auth)
     : IRequestHandler<LogoutRequest, ErrorOr<Success>>
 {
     public async Task<ErrorOr<Success>> Handle(

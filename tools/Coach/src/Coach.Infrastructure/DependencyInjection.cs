@@ -1,13 +1,18 @@
+using Coach.Application.Abstractions.Athletes;
 using Coach.Application.Abstractions.Identity;
+using Coach.Application.Abstractions.Integrations;
+using Coach.Application.Abstractions.Integrations.Strava;
 using Coach.Domain.Repositories;
 using Coach.Infrastructure.Data;
 using Coach.Infrastructure.Identity;
+using Coach.Infrastructure.Integrations.Strava;
 using Coach.Infrastructure.Services;
 using Coach.Infrastructure.Services.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Refit;
 
 namespace Coach.Infrastructure;
 
@@ -53,8 +58,19 @@ public static class DependencyInjection
         services.AddScoped<IUserClaimsPrincipalFactory<User>, UserClaimsPrincipalFactory>();
 
         // Register identity services
-        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IAuthService, Auth>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IIntegrationService, IntegrationService>();
+        services.AddScoped<IAthleteOnboardingService, AthleteOnboardingService>();
+
+        // Register Strava integration with Refit
+        services.Configure<StravaSettings>(configuration.GetSection(StravaSettings.SectionName));
+
+        services.AddRefitClient<IStravaApi>()
+            .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://www.strava.com"));
+
+        services.AddScoped<IStravaAuthService, StravaAuthService>();
+        services.AddScoped<IStravaActivityService, StravaActivityService>();
 
         // Register generic repositories
         services.AddScoped(typeof(IReadRepository<>), typeof(EfReadRepository<>));

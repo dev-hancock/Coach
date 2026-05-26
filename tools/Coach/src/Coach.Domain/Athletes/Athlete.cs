@@ -1,4 +1,5 @@
 using Coach.Domain.Common;
+using Coach.Domain.Integrations;
 
 namespace Coach.Domain.Athletes;
 
@@ -46,7 +47,7 @@ public sealed class Athlete : AggregateRoot
 
     public string? Notes { get; private set; }
 
-    public void UpdateProfile(
+    public void Update(
         ExperienceLevel experienceLevel,
         UnitType unit,
         int trainingDaysPerWeek,
@@ -67,5 +68,37 @@ public sealed class Athlete : AggregateRoot
         CurrentWeeklyDistance = currentWeeklyDistance;
         TypicalLongRunDistance = typicalLongRunDistance;
         Notes = notes;
+    }
+
+    /// <summary>
+    /// Called when an integration is connected to this athlete.
+    /// Raises a domain event to trigger background activity sync.
+    /// </summary>
+    public void OnIntegrationConnected(
+        IntegrationType integrationType,
+        string externalAthleteId,
+        DateTimeOffset connectedAt)
+    {
+        RaiseDomainEvent(new IntegrationConnectedDomainEvent
+        {
+            UserId = UserId,
+            AthleteId = Id,
+            IntegrationType = integrationType,
+            ExternalAthleteId = externalAthleteId,
+            ConnectedAt = connectedAt
+        });
+    }
+
+    /// <summary>
+    /// Called when a Strava integration is connected to this athlete.
+    /// Raises a domain event to trigger background activity sync.
+    /// </summary>
+    [Obsolete("Use OnIntegrationConnected instead. This will be removed in a future version.")]
+    public void OnStravaConnected(long stravaAthleteId, DateTime connectedAt)
+    {
+        OnIntegrationConnected(
+            IntegrationType.Strava,
+            stravaAthleteId.ToString(),
+            connectedAt);
     }
 }

@@ -14,6 +14,11 @@
     <Compile Remove="Features\Goals\GetAll\**" />
     <Compile Remove="Features\Goals\GetById\**" />
     <Compile Remove="Features\Goals\Update\**" />
+    <Compile Remove="Features\Recovery\Create\**" />
+    <Compile Remove="Features\Recovery\Delete\**" />
+    <Compile Remove="Features\Recovery\GetAll\**" />
+    <Compile Remove="Features\Recovery\GetById\**" />
+    <Compile Remove="Features\Recovery\Update\**" />
     <Compile Remove="Features\Training\**" />
     <EmbeddedResource Remove="Features\Activities\Create\**" />
     <EmbeddedResource Remove="Features\Activities\Delete\**" />
@@ -28,6 +33,11 @@
     <EmbeddedResource Remove="Features\Goals\GetAll\**" />
     <EmbeddedResource Remove="Features\Goals\GetById\**" />
     <EmbeddedResource Remove="Features\Goals\Update\**" />
+    <EmbeddedResource Remove="Features\Recovery\Create\**" />
+    <EmbeddedResource Remove="Features\Recovery\Delete\**" />
+    <EmbeddedResource Remove="Features\Recovery\GetAll\**" />
+    <EmbeddedResource Remove="Features\Recovery\GetById\**" />
+    <EmbeddedResource Remove="Features\Recovery\Update\**" />
     <EmbeddedResource Remove="Features\Training\**" />
     <None Remove="Features\Activities\Create\**" />
     <None Remove="Features\Activities\Delete\**" />
@@ -42,6 +52,11 @@
     <None Remove="Features\Goals\GetAll\**" />
     <None Remove="Features\Goals\GetById\**" />
     <None Remove="Features\Goals\Update\**" />
+    <None Remove="Features\Recovery\Create\**" />
+    <None Remove="Features\Recovery\Delete\**" />
+    <None Remove="Features\Recovery\GetAll\**" />
+    <None Remove="Features\Recovery\GetById\**" />
+    <None Remove="Features\Recovery\Update\**" />
     <None Remove="Features\Training\**" />
   </ItemGroup>
 
@@ -58,6 +73,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Abstractions\Integrations\Strava\" />
     <Folder Include="Features\Coaching\Create\" />
     <Folder Include="Features\Coaching\Delete\" />
     <Folder Include="Features\Coaching\GetAll\" />
@@ -78,11 +94,10 @@
     <Folder Include="Features\Injuries\GetAll\" />
     <Folder Include="Features\Injuries\GetById\" />
     <Folder Include="Features\Injuries\Update\" />
-    <Folder Include="Features\Recovery\Create\" />
-    <Folder Include="Features\Recovery\Delete\" />
-    <Folder Include="Features\Recovery\GetAll\" />
-    <Folder Include="Features\Recovery\GetById\" />
-    <Folder Include="Features\Recovery\Update\" />
+    <Folder Include="Features\Integrations\Strava\Connect\" />
+    <Folder Include="Features\Integrations\Strava\Disconnect\" />
+    <Folder Include="Features\Integrations\Strava\Events\" />
+    <Folder Include="Features\Integrations\Strava\Sync\" />
   </ItemGroup>
 
   <PropertyGroup>

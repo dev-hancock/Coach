@@ -8,7 +8,7 @@ namespace Coach.Application.Features.Auth.Register;
 
 internal sealed class RegisterHandler(
     IUserService users,
-    IAuthenticationService auth,
+    IAuthService auth,
     IAthleteRepository athletes)
     : IRequestHandler<RegisterRequest, ErrorOr<RegisterResponse>>
 {

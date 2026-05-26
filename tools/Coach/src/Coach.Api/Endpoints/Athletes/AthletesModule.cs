@@ -23,7 +23,7 @@ public static class AthletesModule
             .WithSummary("Get current user's athlete profile")
             .WithDescription("Retrieves the athlete profile for the authenticated user")
             .RequireAuthorization()
-            .Produces<AthleteProfileResponse>()
+            .Produces<GetAthleteResponse>()
             .ProducesProblem(StatusCodes.Status401Unauthorized)
             .ProducesProblem(StatusCodes.Status404NotFound);
 
@@ -32,7 +32,7 @@ public static class AthletesModule
             .WithSummary("Update current user's athlete profile")
             .WithDescription("Updates the athlete profile for the authenticated user")
             .RequireAuthorization()
-            .Produces<UpdateAthleteProfileResponse>()
+            .Produces<UpdateAthleteResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status401Unauthorized)
             .ProducesProblem(StatusCodes.Status404NotFound);
@@ -54,7 +54,7 @@ public static class AthletesModule
         ISender sender,
         CancellationToken cancellationToken)
     {
-        var request = new UpdateAthleteProfileRequest(
+        var request = new UpdateAthleteRequest(
             user.GetUserContext(),
             dto.ExperienceLevel,
             dto.PreferredUnits,

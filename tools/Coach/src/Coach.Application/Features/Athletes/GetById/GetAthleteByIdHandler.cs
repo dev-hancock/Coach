@@ -4,21 +4,14 @@ using MediatR;
 
 namespace Coach.Application.Features.Athletes.GetById;
 
-internal sealed class GetAthleteByIdHandler 
+internal sealed class GetAthleteByIdHandler(IAthleteRepository athletes)
     : IRequestHandler<GetAthleteByIdRequest, ErrorOr<GetAthleteByIdResponse>>
 {
-    private readonly IAthleteRepository _repository;
-
-    public GetAthleteByIdHandler(IAthleteRepository repository)
-    {
-        _repository = repository;
-    }
-
     public async Task<ErrorOr<GetAthleteByIdResponse>> Handle(
         GetAthleteByIdRequest request, 
         CancellationToken cancellationToken)
     {
-        var athlete = await _repository.GetByIdAsync(request.Id, cancellationToken);
+        var athlete = await athletes.GetByIdAsync(request.Id, cancellationToken);
 
         if (athlete is null)
         {

@@ -9,15 +9,8 @@ namespace Coach.Infrastructure.Services;
 /// Infrastructure implementation of user management service using ASP.NET Core Identity.
 /// Maps between Infrastructure IdentityUser and Domain User.
 /// </summary>
-public sealed class UserService : IUserService
+public sealed class UserService(UserManager<User> users) : IUserService
 {
-    private readonly UserManager<User> _users;
-
-    public UserService(UserManager<User> users)
-    {
-        _users = users;
-    }
-
     public async Task<ErrorOr<IUser>> CreateUserAsync(
         string email,
         string password,
@@ -29,7 +22,7 @@ public sealed class UserService : IUserService
             Email = email
         };
 
-        var result = await _users.CreateAsync(user, password);
+        var result = await users.CreateAsync(user, password);
 
         if (!result.Succeeded)
         {
@@ -48,7 +41,7 @@ public sealed class UserService : IUserService
         Guid athleteId,
         CancellationToken cancellationToken = default)
     {
-        var user = await _users.FindByIdAsync(userId.ToString());
+        var user = await users.FindByIdAsync(userId.ToString());
 
         if (user is null)
         {
@@ -57,7 +50,7 @@ public sealed class UserService : IUserService
 
         user.AthleteId = athleteId;
 
-        var result = await _users.UpdateAsync(user);
+        var result = await users.UpdateAsync(user);
 
         if (!result.Succeeded)
         {
@@ -75,7 +68,7 @@ public sealed class UserService : IUserService
         Guid userId,
         CancellationToken cancellationToken = default)
     {
-        var user = await _users.FindByIdAsync(userId.ToString());
+        var user = await users.FindByIdAsync(userId.ToString());
 
         if (user is null)
         {
@@ -89,7 +82,7 @@ public sealed class UserService : IUserService
         string email,
         CancellationToken cancellationToken = default)
     {
-        var user = await _users.FindByEmailAsync(email);
+        var user = await users.FindByEmailAsync(email);
 
         if (user is null)
         {
@@ -105,9 +98,9 @@ public sealed class UserService : IUserService
     {
         var errors = new List<Error>();
 
-        foreach (var validator in _users.PasswordValidators)
+        foreach (var validator in users.PasswordValidators)
         {
-            var result = await validator.ValidateAsync(_users, null!, password);
+            var result = await validator.ValidateAsync(users, null!, password);
 
             if (!result.Succeeded)
             {

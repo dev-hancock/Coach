@@ -28,13 +28,22 @@
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="docs\agents\architect.md" />
+    <None Include="docs\agents\engineer.md" />
     <None Include="docs\ARCHITECTURE.md" />
     <None Include="docs\HEALTH_DOMAIN_REFACTOR.md" />
+    <None Include="docs\INTEGRATION_CLEANUP_PLAN.md" />
     <None Include="docs\MIGRATION_PLAN.md" />
     <None Include="docs\MIGRATION_STATUS.md" />
     <None Include="docs\MVP_IMPLEMENTATION_ROADMAP.md" />
     <None Include="docs\MVP_ROADMAP.md" />
     <None Include="docs\PRODUCTION_REFACTOR_SUMMARY.md" />
+    <None Include="docs\PROJECT_SKILLS.md" />
+    <None Include="docs\README.md" />
+    <None Include="docs\REQUIRED_SKILLS.md" />
+    <None Include="docs\skills\clean-architecture\SKILL.md" />
+    <None Include="docs\skills\ddd\SKILL.md" />
+    <None Include="docs\skills\ports-adapters\SKILL.md" />
     <None Include="DOMAIN_LAYER.md" />
     <None Include="FEATURE_IMPLEMENTATION_STATUS.md" />
     <None Include="fix-mediatr-imports.ps1" />
@@ -49,6 +58,7 @@
     <None Include="RESTRUCTURE_COMPLETE.md" />
     <None Include="scripts\GenerateUseCases.ps1" />
     <None Include="src\Athlete.Application\GlobalUsings.cs" />
+    <None Include="STRAVA_INTEGRATION_API_SUMMARY.md" />
     <None Include="TDD_WORKFLOW.md" />
     <None Include="tests\AthleteMcpServer.Tests\Activities\LogCompletedRun\Failure.cs" />
     <None Include="tests\AthleteMcpServer.Tests\Activities\LogCompletedRun\Success.cs" />
@@ -72,5 +82,8 @@
     <None Include="tests\USE_CASE_SIGNATURES.md" />
     <None Include="TEST_CONVENTIONS.md" />
     <None Include="TEST_PROJECT_SETUP.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="docs\skills\provider-agnostic-integration\" />
   </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Coach.Application.Features.Auth.Login;
 
-internal sealed class LoginHandler(IAuthenticationService auth)
+internal sealed class LoginHandler(IAuthService auth)
     : IRequestHandler<LoginRequest, ErrorOr<LoginResponse>>
 {
     public async Task<ErrorOr<LoginResponse>> Handle(

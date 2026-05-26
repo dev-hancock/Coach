@@ -1,5 +1,6 @@
 using Coach.Api.Endpoints.Athletes;
 using Coach.Api.Endpoints.Auth;
+using Coach.Api.Endpoints.Integrations;
 using Coach.Api.Extensions;
 using Coach.Infrastructure.Identity;
 
@@ -38,6 +39,10 @@ app.MapCustomAuthEndpoints();
 
 // Map athlete endpoints
 app.MapAthletes();
+
+// Map integration endpoints
+app.MapIntegrations();
+
 // Future modules:
 // app.MapActivities();
 // app.MapEquipment();

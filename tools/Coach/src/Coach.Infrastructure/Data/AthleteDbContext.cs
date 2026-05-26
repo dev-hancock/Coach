@@ -13,6 +13,8 @@ using Coach.Domain.Gear;
 using Coach.Domain.Coaching;
 using Coach.Domain.Entities;
 using Coach.Infrastructure.Identity;
+using Coach.Application.Common;
+using MediatR;
 
 namespace Coach.Infrastructure.Data;
 
@@ -21,22 +23,38 @@ namespace Coach.Infrastructure.Data;
 /// </summary>
 public sealed class AthleteDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
+    private readonly IPublisher? _publisher;
+
     public DbSet<Athlete> Athletes => Set<Athlete>();
+
     public DbSet<TrainingGoal> TrainingGoals => Set<TrainingGoal>();
+
     public DbSet<TrainingPlan> TrainingPlans => Set<TrainingPlan>();
+
     public DbSet<PlannedSession> PlannedSessions => Set<PlannedSession>();
+
     public DbSet<Activity> Activities => Set<Activity>();
+
     public DbSet<FatigueEntry> Fatigue => Set<FatigueEntry>();
+
     public DbSet<InjuryEntry> Injuries => Set<InjuryEntry>();
+
     public DbSet<BodyLocation> BodyLocations => Set<BodyLocation>();
+
     public DbSet<RecoveryEntry> RecoveryEntries => Set<RecoveryEntry>();
+
     public DbSet<Equipment> Equipment => Set<Equipment>();
+
     public DbSet<CoachDecision> CoachDecisions => Set<CoachDecision>();
+
     public DbSet<WorkoutPlan> WorkoutPlans => Set<WorkoutPlan>();
 
-    public AthleteDbContext(DbContextOptions<AthleteDbContext> options)
+    public DbSet<Integration> Integrations => Set<Integration>();
+
+    public AthleteDbContext(DbContextOptions<AthleteDbContext> options, IPublisher? publisher = null)
         : base(options)
     {
+        _publisher = publisher;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -351,5 +369,79 @@ public sealed class AthleteDbContext : IdentityDbContext<User, IdentityRole<Guid
             entity.Property(x => x.UpdatedAt)
                 .IsRequired();
         });
+
+        modelBuilder.Entity<Integration>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.Type)
+                .HasConversion<string>()
+                .HasMaxLength(50)
+                .IsRequired();
+
+            entity.Property(x => x.AccessToken)
+                .HasMaxLength(500)
+                .IsRequired();
+
+            entity.Property(x => x.RefreshToken)
+                .HasMaxLength(500)
+                .IsRequired();
+
+            entity.Property(x => x.Metadata)
+                .HasMaxLength(4000);
+
+            entity.HasOne(x => x.User)
+                .WithMany(u => u.Integrations)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(x => new { x.UserId, x.Type })
+                .IsUnique();
+        });
+    }
+
+    /// <summary>
+    /// Intercepts SaveChangesAsync to dispatch domain events from aggregate roots.
+    /// This enables event-driven architecture within the domain layer.
+    /// </summary>
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        // Collect all domain events from aggregate roots before saving
+        var aggregateRoots = ChangeTracker
+            .Entries<AggregateRoot>()
+            .Where(e => e.Entity.DomainEvents.Any())
+            .Select(e => e.Entity)
+            .ToList();
+
+        var domainEvents = aggregateRoots
+            .SelectMany(a => a.DomainEvents)
+            .ToList();
+
+        // Clear events from aggregates (they'll be dispatched below)
+        foreach (var aggregate in aggregateRoots)
+        {
+            aggregate.ClearDomainEvents();
+        }
+
+        // Save changes to database
+        var result = await base.SaveChangesAsync(cancellationToken);
+
+        // Dispatch domain events AFTER successful save
+        // Wrap each domain event in a DomainEventNotification for MediatR
+        if (_publisher is not null)
+        {
+            foreach (var domainEvent in domainEvents)
+            {
+                var notificationType = typeof(DomainEventNotification<>).MakeGenericType(domainEvent.GetType());
+                var notification = Activator.CreateInstance(notificationType, domainEvent);
+
+                if (notification is INotification mediatrNotification)
+                {
+                    await _publisher.Publish(mediatrNotification, cancellationToken);
+                }
+            }
+        }
+
+        return result;
     }
 }

@@ -13,4 +13,9 @@ public class User : IdentityUser<Guid>, IUser
     /// Reference to the athlete profile for this user.
     /// </summary>
     public Guid AthleteId { get; set; }
+
+    /// <summary>
+    /// Collection of external integration connections
+    /// </summary>
+    public ICollection<Integration> Integrations { get; set; } = [];
 }
