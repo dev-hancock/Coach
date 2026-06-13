@@ -1,8 +1,6 @@
 using Coach.Application;
 using Coach.Infrastructure;
-using Coach.Infrastructure.Identity;
 using FluentValidation;
-using Microsoft.AspNetCore.Identity;
 
 namespace Coach.Api.Extensions;
 
@@ -22,42 +20,37 @@ public static class ServiceCollectionExtensions
                 Version = "v1",
                 Description = "API for managing triathlon training, coaching, and athlete performance tracking"
             });
+
+            // Add JWT Bearer authentication to Swagger
+            options.AddSecurityDefinition("Bearer", new()
+            {
+                Name = "Authorization",
+                Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+            });
+
+            options.AddSecurityRequirement(new()
+            {
+                {
+                    new()
+                    {
+                        Reference = new()
+                        {
+                            Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
         });
 
         services.AddProblemDetails();
 
-        // Configure authentication with cookie-based identity
-        services.AddAuthentication(IdentityConstants.ApplicationScheme)
-            .AddIdentityCookies();
-
-        services.AddAuthorization();
-
-        // Register SignInManager
-        services.AddScoped<SignInManager<User>>();
-
-        // Configure application cookie settings for API
-        services.ConfigureApplicationCookie(options =>
-        {
-            options.Cookie.HttpOnly = true;
-            options.Cookie.SameSite = SameSiteMode.Strict;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            options.ExpireTimeSpan = TimeSpan.FromHours(24);
-            options.SlidingExpiration = true;
-
-            // Return 401 instead of redirecting for API endpoints
-            options.Events.OnRedirectToLogin = context =>
-            {
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                return Task.CompletedTask;
-            };
-            options.Events.OnRedirectToAccessDenied = context =>
-            {
-                context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                return Task.CompletedTask;
-            };
-        });
-
-        // Register MediatR handlers from API layer (for auth workflows)
+        // Register MediatR handlers from API layer
         services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
@@ -76,7 +69,7 @@ public static class ServiceCollectionExtensions
         // Add application layer (MediatR, FluentValidation, ErrorOr)
         services.AddApplication();
 
-        // Add infrastructure layer (DbContext, Repositories, External Services)
+        // Add infrastructure layer (DbContext, Repositories, External Services, JWT Authentication)
         services.AddInfrastructure(configuration);
 
         return services;

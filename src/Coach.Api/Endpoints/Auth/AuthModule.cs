@@ -1,6 +1,7 @@
 using Coach.Api.Extensions;
 using Coach.Application.Features.Auth.Login;
 using Coach.Application.Features.Auth.Logout;
+using Coach.Application.Features.Auth.RefreshToken;
 using Coach.Application.Features.Auth.Register;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ public static class AuthModule
         api.MapPost("/register", Register)
             .WithName("Register")
             .WithSummary("Register a new user and create athlete profile")
-            .WithDescription("Creates both a user account and linked athlete profile in one operation")
+            .WithDescription("Creates both a user account and linked athlete profile, returns JWT tokens")
             .Produces<RegisterResponse>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status409Conflict);
@@ -25,8 +26,16 @@ public static class AuthModule
         api.MapPost("/login", Login)
             .WithName("Login")
             .WithSummary("Authenticate user")
-            .WithDescription("Authenticates a user with email and password")
+            .WithDescription("Authenticates a user with email and password, returns JWT tokens")
             .Produces<LoginResponse>()
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status401Unauthorized);
+
+        api.MapPost("/refresh", RefreshToken)
+            .WithName("RefreshToken")
+            .WithSummary("Refresh access token")
+            .WithDescription("Generates a new access token using a valid refresh token")
+            .Produces<RefreshTokenResponse>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status401Unauthorized);
 
@@ -34,7 +43,7 @@ public static class AuthModule
             .RequireAuthorization()
             .WithName("Logout")
             .WithSummary("Sign out current user")
-            .WithDescription("Signs out the currently authenticated user")
+            .WithDescription("Revokes the refresh token for the authenticated user")
             .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status401Unauthorized);
 
@@ -46,11 +55,20 @@ public static class AuthModule
         ISender sender,
         CancellationToken cancellationToken)
     {
-        return sender.Send(request, cancellationToken).ToCreatedAsync(_ => "/api/athletes/me", response => response);
+        return sender.Send(request, cancellationToken)
+            .ToCreatedAsync(_ => "/api/athletes/me", response => response);
     }
 
     private static Task<IResult> Login(
         [FromBody] LoginRequest request,
+        ISender sender,
+        CancellationToken cancellationToken)
+    {
+        return sender.Send(request, cancellationToken).ToOkAsync();
+    }
+
+    private static Task<IResult> RefreshToken(
+        [FromBody] RefreshTokenRequest request,
         ISender sender,
         CancellationToken cancellationToken)
     {

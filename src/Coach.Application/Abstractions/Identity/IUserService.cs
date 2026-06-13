@@ -18,7 +18,7 @@ public interface IUserService
     /// <summary>
     /// Links an existing user account to an athlete profile.
     /// </summary>
-    Task<ErrorOr<Success>> LinkToAthleteAsync(
+    Task<ErrorOr<IUser>> LinkToAthleteAsync(
         Guid userId,
         Guid athleteId,
         CancellationToken cancellationToken = default);

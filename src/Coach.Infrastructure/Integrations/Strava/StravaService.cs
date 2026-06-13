@@ -14,7 +14,7 @@ namespace Coach.Infrastructure.Integrations.Strava;
 /// </summary>
 internal sealed class StravaService(
     IStravaApi stravaApi,
-    IRepository<IntegrationConnection> connectionRepository,
+    IRepository<Integration> connectionRepository,
     IAthleteOnboardingService athleteOnboarding,
     StravaSettings settings) : IIntegrationService
 {
@@ -47,7 +47,7 @@ internal sealed class StravaService(
         var spec = new GetIntegrationConnectionByUserAndTypeSpec(userId, IntegrationType.Strava);
         var existing = await connectionRepository.FirstOrDefaultAsync(spec, cancellationToken);
 
-        IntegrationConnection connection;
+        Integration connection;
         if (existing is not null)
         {
             // Update existing connection
@@ -58,7 +58,7 @@ internal sealed class StravaService(
         else
         {
             // Create new connection
-            connection = new IntegrationConnection(
+            connection = new Integration(
                 userId,
                 IntegrationType.Strava,
                 profile.ExternalAthleteId.ToString(),

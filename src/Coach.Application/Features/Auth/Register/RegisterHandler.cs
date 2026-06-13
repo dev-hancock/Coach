@@ -7,9 +7,10 @@ using MediatR;
 namespace Coach.Application.Features.Auth.Register;
 
 internal sealed class RegisterHandler(
-    IUserService users,
-    IAuthService auth,
-    IRepository<Athlete> athletes)
+        IUserService users,
+        IAuthService auth,
+        ITokenService tokens,
+        IRepository<Athlete> athletes)
     : IRequestHandler<RegisterRequest, ErrorOr<RegisterResponse>>
 {
     public async Task<ErrorOr<RegisterResponse>> Handle(
@@ -24,68 +25,112 @@ internal sealed class RegisterHandler(
         }
 
         return await CreateUser(
-                request.Email, 
-                request.Password, 
+                request.Email,
+                request.Password,
                 cancellationToken)
-            .ThenAsync(user => 
+            .ThenAsync(context =>
                 CreateAthlete(
-                    user, 
-                    request.Name, 
+                    context,
+                    request.Name,
                     cancellationToken))
-            .ThenAsync(context => 
+            .ThenAsync(context =>
                 LinkToAthlete(
-                    context, 
+                    context,
                     cancellationToken))
-            .ThenAsync(context => 
+            .ThenAsync(context =>
                 SignIn(
-                    context, 
-                    request.Email, 
-                    request.Password, 
+                    context,
+                    request.Email,
+                    request.Password,
+                    false,
                     cancellationToken))
-            .Then(context => 
+            .ThenAsync(context =>
+                CreateTokens(
+                    context,
+                    cancellationToken))
+            .Then(context =>
                 new RegisterResponse(
-                    context.UserId, 
-                    context.AthleteId, 
-                    request.Email));
+                    context.User.Id,
+                    context.Tokens.AccessToken,
+                    context.Tokens.RefreshToken,
+                    context.Tokens.ExpiresAt));
     }
 
-    private Task<ErrorOr<IUser>> CreateUser(string email, string password, CancellationToken cancellationToken)
+    private Task<ErrorOr<RegisterContext>> CreateUser(string email, string password, CancellationToken cancellationToken)
     {
-        return users.CreateUserAsync(email, password, cancellationToken);
+        return users
+            .CreateUserAsync(
+                email,
+                password,
+                cancellationToken)
+            .Then(result => new RegisterContext
+            {
+                User = result
+            });
     }
 
     private async Task<ErrorOr<RegisterContext>> CreateAthlete(
-        IUser user,
+        RegisterContext context,
         string name,
         CancellationToken cancellationToken)
     {
-        var athlete = new Athlete(user.Id, name);
+        var athlete = new Athlete(context.User.Id, name);
 
         await athletes.AddAsync(athlete, cancellationToken);
         await athletes.SaveChangesAsync(cancellationToken);
 
-        return new RegisterContext(user.Id, athlete.Id);
+        return context;
     }
 
-    private async Task<ErrorOr<RegisterContext>> LinkToAthlete(
+    private Task<ErrorOr<RegisterContext>> LinkToAthlete(
         RegisterContext context,
         CancellationToken cancellationToken)
     {
-        var result = await users.LinkToAthleteAsync(context.UserId, context.AthleteId, cancellationToken);
-
-        return result.IsError ? result.Errors : context;
+        return users.LinkToAthleteAsync(
+                context.User.Id,
+                context.User.AthleteId,
+                cancellationToken)
+            .Then(result => context with
+            {
+                User = result
+            });
     }
 
-    private async Task<ErrorOr<RegisterContext>> SignIn(
+    private Task<ErrorOr<RegisterContext>> SignIn(
         RegisterContext context,
         string email,
         string password,
+        bool rememberMe,
         CancellationToken cancellationToken)
     {
-        var result = await auth.LoginAsync(email, password, rememberMe: true, cancellationToken);
-
-        return result.IsError ? result.Errors : context;
+        return auth.LoginAsync(
+                email,
+                password,
+                rememberMe,
+                cancellationToken)
+            .Then(result => context with
+            {
+                User = result
+            });
     }
 
-    private sealed record RegisterContext(Guid UserId, Guid AthleteId);
+    private Task<ErrorOr<RegisterContext>> CreateTokens(
+        RegisterContext context,
+        CancellationToken cancellationToken)
+    {
+        return tokens.CreateTokenAsync(
+                context.User,
+                cancellationToken)
+            .Then(result => context with
+            {
+                Tokens = result
+            });
+    }
+
+    private sealed record RegisterContext
+    {
+        public IUser User { get; init; } = null!;
+
+        public TokenResult Tokens { get; init; } = null!;
+    }
 }

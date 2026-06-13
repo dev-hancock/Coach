@@ -7,11 +7,11 @@ namespace Coach.Domain.Integrations;
 /// Domain entity representing an integration connection.
 /// Tracks OAuth tokens, connection status, and sync metadata.
 /// </summary>
-public sealed class IntegrationConnection : Entity
+public sealed class Integration : Entity
 {
-    private IntegrationConnection() { } // EF
+    private Integration() { } // EF
 
-    public IntegrationConnection(
+    public Integration(
         Guid userId,
         IntegrationType type,
         string externalId,

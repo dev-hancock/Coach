@@ -22,6 +22,7 @@ public sealed class BackgroundJobClient : IBackgroundJobClient
     public async ValueTask EnqueueAsync(Func<CancellationToken, ValueTask> workItem, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(workItem);
+
         await _queue.Writer.WriteAsync(workItem, cancellationToken);
     }
 

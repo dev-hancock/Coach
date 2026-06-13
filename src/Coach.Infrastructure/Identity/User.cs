@@ -18,4 +18,9 @@ public class User : IdentityUser<Guid>, IUser
     /// Collection of external integration connections
     /// </summary>
     public ICollection<Integration> Integrations { get; set; } = [];
+
+    /// <summary>
+    /// Collection of refresh tokens for this user
+    /// </summary>
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = [];
 }

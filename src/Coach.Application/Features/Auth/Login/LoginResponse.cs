@@ -2,5 +2,6 @@ namespace Coach.Application.Features.Auth.Login;
 
 public sealed record LoginResponse(
     Guid UserId,
-    Guid AthleteId,
-    string Email);
+    string AccessToken,
+    string RefreshToken,
+    DateTime ExpiresAt);

@@ -36,7 +36,7 @@ public sealed class UserService(UserManager<User> users) : IUserService
         return user;
     }
 
-    public async Task<ErrorOr<Success>> LinkToAthleteAsync(
+    public async Task<ErrorOr<IUser>> LinkToAthleteAsync(
         Guid userId,
         Guid athleteId,
         CancellationToken cancellationToken = default)
@@ -61,7 +61,7 @@ public sealed class UserService(UserManager<User> users) : IUserService
             return errors;
         }
 
-        return Result.Success;
+        return user;
     }
 
     public async Task<ErrorOr<IUser>> GetUserByIdAsync(

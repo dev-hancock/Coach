@@ -27,6 +27,8 @@ public sealed class AthleteDbContext : IdentityDbContext<User, IdentityRole<Guid
 
     public DbSet<Athlete> Athletes => Set<Athlete>();
 
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
     public DbSet<TrainingGoal> TrainingGoals => Set<TrainingGoal>();
 
     public DbSet<TrainingPlan> TrainingPlans => Set<TrainingPlan>();
@@ -397,6 +399,23 @@ public sealed class AthleteDbContext : IdentityDbContext<User, IdentityRole<Guid
 
             entity.HasIndex(x => new { x.UserId, x.Type })
                 .IsUnique();
+        });
+
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Token)
+                .IsRequired()
+                .HasMaxLength(500);
+
+            entity.HasIndex(e => e.Token)
+                .IsUnique();
+
+            entity.HasOne(e => e.User)
+                .WithMany(u => u.RefreshTokens)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 

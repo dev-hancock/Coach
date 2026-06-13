@@ -2,7 +2,6 @@ using Coach.Api.Endpoints.Athletes;
 using Coach.Api.Endpoints.Auth;
 using Coach.Api.Endpoints.Integrations;
 using Coach.Api.Extensions;
-using Coach.Infrastructure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,16 +24,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Authentication & Authorization
+// Authentication & Authorization (JWT)
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Map Identity API endpoints (provides /register and /login with cookies)
-app.MapGroup("/api/auth")
-    .MapIdentityApi<User>()
-    .WithTags("Authentication");
-
-// Map custom auth endpoints (athlete registration)
+// Map auth endpoints (JWT-based authentication with athlete registration)
 app.MapCustomAuthEndpoints();
 
 // Map athlete endpoints
