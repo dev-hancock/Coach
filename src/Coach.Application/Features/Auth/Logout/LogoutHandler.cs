@@ -4,15 +4,15 @@ using MediatR;
 
 namespace Coach.Application.Features.Auth.Logout;
 
-public sealed record LogoutRequest : IRequest<ErrorOr<Success>>;
-
-internal sealed class LogoutHandler(IAuthService auth)
+internal sealed class LogoutHandler(ITokenService tokens)
     : IRequestHandler<LogoutRequest, ErrorOr<Success>>
 {
     public async Task<ErrorOr<Success>> Handle(
         LogoutRequest request,
         CancellationToken cancellationToken)
     {
-        return await auth.LogoutAsync(cancellationToken);
+        return await tokens.RevokeTokenAsync(
+            request.RefreshToken,
+            cancellationToken);
     }
 }

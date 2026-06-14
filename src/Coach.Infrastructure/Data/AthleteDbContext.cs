@@ -12,6 +12,7 @@ using Coach.Domain.Recovery;
 using Coach.Domain.Gear;
 using Coach.Domain.Coaching;
 using Coach.Domain.Entities;
+using Coach.Domain.Integrations;
 using Coach.Infrastructure.Identity;
 using Coach.Application.Common;
 using MediatR;
@@ -381,6 +382,10 @@ public sealed class AthleteDbContext : IdentityDbContext<User, IdentityRole<Guid
                 .HasMaxLength(50)
                 .IsRequired();
 
+            entity.Property(x => x.ExternalId)
+                .HasMaxLength(100)
+                .IsRequired();
+
             entity.Property(x => x.AccessToken)
                 .HasMaxLength(500)
                 .IsRequired();
@@ -389,10 +394,7 @@ public sealed class AthleteDbContext : IdentityDbContext<User, IdentityRole<Guid
                 .HasMaxLength(500)
                 .IsRequired();
 
-            entity.Property(x => x.Metadata)
-                .HasMaxLength(4000);
-
-            entity.HasOne(x => x.User)
+            entity.HasOne<User>()
                 .WithMany(u => u.Integrations)
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);

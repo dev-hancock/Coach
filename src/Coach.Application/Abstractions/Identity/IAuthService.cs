@@ -16,9 +16,5 @@ public interface IAuthService
         bool rememberMe = false,
         CancellationToken cancellationToken = default);
 
-    /// <summary>
-    /// Signs out the current user.
-    /// </summary>
-    Task<ErrorOr<Success>> LogoutAsync(
-        CancellationToken cancellationToken = default);
+
 }

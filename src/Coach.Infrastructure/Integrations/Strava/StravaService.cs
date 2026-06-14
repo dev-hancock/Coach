@@ -4,7 +4,6 @@ using Coach.Domain.Integrations;
 using Coach.Domain.Repositories;
 using Coach.Domain.Specifications.Integrations;
 using ErrorOr;
-using IntegrationType = Coach.Domain.Integrations.IntegrationType;
 
 namespace Coach.Infrastructure.Integrations.Strava;
 

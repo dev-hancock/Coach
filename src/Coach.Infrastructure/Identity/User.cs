@@ -1,4 +1,5 @@
 ﻿using Coach.Application.Abstractions.Identity;
+using Coach.Domain.Integrations;
 using Microsoft.AspNetCore.Identity;
 
 namespace Coach.Infrastructure.Identity;

@@ -1,6 +1,7 @@
 using Coach.Application;
 using Coach.Infrastructure;
 using FluentValidation;
+using Microsoft.OpenApi;
 
 namespace Coach.Api.Extensions;
 
@@ -22,28 +23,21 @@ public static class ServiceCollectionExtensions
             });
 
             // Add JWT Bearer authentication to Swagger
-            options.AddSecurityDefinition("Bearer", new()
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",
-                Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                Type = SecuritySchemeType.Http,
                 Scheme = "Bearer",
                 BearerFormat = "JWT",
-                In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                In = ParameterLocation.Header,
                 Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
             });
 
-            options.AddSecurityRequirement(new()
+            options.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
             {
                 {
-                    new()
-                    {
-                        Reference = new()
-                        {
-                            Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    Array.Empty<string>()
+                    new OpenApiSecuritySchemeReference("Bearer"),
+                    []
                 }
             });
         });

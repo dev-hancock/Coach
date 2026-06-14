@@ -76,9 +76,10 @@ public static class AuthModule
     }
 
     private static Task<IResult> Logout(
+        [FromBody] LogoutRequest request,
         ISender sender,
         CancellationToken cancellationToken)
     {
-        return sender.Send(new LogoutRequest(), cancellationToken).ToNoContentAsync();
+        return sender.Send(request, cancellationToken).ToNoContentAsync();
     }
 }

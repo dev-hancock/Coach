@@ -1,5 +1,4 @@
 using Coach.Domain.Common;
-using Coach.Domain.Integrations;
 
 namespace Coach.Domain.Integrations;
 
@@ -29,12 +28,19 @@ public sealed class Integration : Entity
     }
 
     public Guid UserId { get; private set; }
+
     public IntegrationType Type { get; private set; }
+
     public string ExternalId { get; private set; } = string.Empty;
+
     public string AccessToken { get; private set; } = string.Empty;
+
     public string RefreshToken { get; private set; } = string.Empty;
+
     public DateTimeOffset ExpiresAt { get; private set; }
+
     public DateTimeOffset ConnectedAt { get; private set; }
+
     public DateTimeOffset? LastSyncedAt { get; private set; }
 
     public void UpdateTokens(string accessToken, string refreshToken, DateTimeOffset expiresAt)
