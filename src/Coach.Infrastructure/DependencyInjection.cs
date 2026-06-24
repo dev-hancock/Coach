@@ -8,6 +8,7 @@ using Coach.Domain.Repositories;
 using Coach.Infrastructure.Data;
 using Coach.Infrastructure.Identity;
 using Coach.Infrastructure.Integrations.Strava;
+using Coach.Infrastructure.Persistence;
 using Coach.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,7 @@ public static class DependencyInjection
 
             options.UseNpgsql(connectionString);
         });
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         services.AddIdentityCore<User>(options =>
             {
@@ -104,8 +106,6 @@ public static class DependencyInjection
             var settings = sp.GetRequiredService<IOptions<StravaSettings>>().Value;
             return new StravaService(api, repo, onboarding, settings);
         });
-
-        services.AddScoped(typeof(IRepository<>), typeof(RepositoryBase<>));
 
         return services;
     }

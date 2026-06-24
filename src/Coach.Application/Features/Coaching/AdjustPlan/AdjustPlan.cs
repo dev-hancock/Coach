@@ -29,8 +29,8 @@ public sealed record AdjustPlanAfterRunResponse(
 /// Handler for adjusting a plan after a run.
 /// </summary>
 internal sealed class AdjustPlanAfterRunHandler(
-    Ardalis.Specification.IReadRepositoryBase<Activity> runs,
-    Ardalis.Specification.IReadRepositoryBase<TrainingPlan> plans,
+    IRepositoryBase<Activity> runs,
+    IRepositoryBase<TrainingPlan> plans,
     IRepository<CoachDecision> decisions) : IRequestHandler<AdjustPlanAfterRunRequest, AdjustPlanAfterRunResponse>
 {
     public async Task<AdjustPlanAfterRunResponse> Handle(AdjustPlanAfterRunRequest request, CancellationToken cancellationToken)

@@ -1,47 +1,49 @@
 services:
   db:
     image: postgres:15.3
-    container_name: athlete_db
+    container_name: app-db
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-athlete_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-athlete_password}
-      POSTGRES_DB: ${POSTGRES_DB:-athlete_db}
+      POSTGRES_USER: ${POSTGRES_USER:-app_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-app_password}
+      POSTGRES_DB: ${POSTGRES_DB:-app_db}
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-athlete_user}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-app_user}"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - athlete-network
+      - app-network
 
-  athlete:
-    image: ${DOCKER_REGISTRY-}athlete-mcp-server
-    container_name: athlete
+  app:
+    image: ${DOCKER_REGISTRY-}coach-api
+    container_name: coach-api
     build:
       context: .
-      dockerfile: src/AthleteMcpServer/Dockerfile
+      dockerfile: src/Coach.Api/Dockerfile
+    ports:
+      - "5000:5000"
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-athlete_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-athlete_password}
-      POSTGRES_DB: ${POSTGRES_DB:-athlete_db}
+      POSTGRES_USER: ${POSTGRES_USER:-app_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-app_password}
+      POSTGRES_DB: ${POSTGRES_DB:-app_db}
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
-      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=${POSTGRES_DB:-athlete_db};Username=${POSTGRES_USER:-athlete_user};Password=${POSTGRES_PASSWORD:-athlete_password}"
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=${POSTGRES_DB:-app_db};Username=${POSTGRES_USER:-app_user};Password=${POSTGRES_PASSWORD:-app_password}"
     depends_on:
       db:
         condition: service_healthy
     stdin_open: true
     tty: true
     networks:
-      - athlete-network
+      - app-network
 
 volumes:
   db_data:
 
 networks:
-  athlete-network:
+  app-network:
     driver: bridge

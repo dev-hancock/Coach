@@ -37,7 +37,7 @@ public sealed record HealthEntryDto(
 /// <summary>
 /// Handler for getting health summary.
 /// </summary>
-internal sealed class GetHealthSummaryHandler(Ardalis.Specification.IReadRepositoryBase<HealthEntry> repository) : IRequestHandler<GetHealthSummaryRequest, HealthSummaryResponse>
+internal sealed class GetHealthSummaryHandler(IRepository<HealthEntry> repository) : IRequestHandler<GetHealthSummaryRequest, HealthSummaryResponse>
 {
     public async Task<HealthSummaryResponse> Handle(GetHealthSummaryRequest request, CancellationToken cancellationToken)
     {

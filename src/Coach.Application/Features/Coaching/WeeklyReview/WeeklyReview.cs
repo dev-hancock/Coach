@@ -28,8 +28,8 @@ public sealed record GenerateWeeklyReviewResponse(
 /// Handler for generating a weekly review.
 /// </summary>
 internal sealed class GenerateWeeklyReviewHandler(
-    Ardalis.Specification.IReadRepositoryBase<Activity> runs,
-    Ardalis.Specification.IReadRepositoryBase<HealthEntry> health,
+    IRepositoryBase<Activity> runs,
+    IRepositoryBase<HealthEntry> health,
     IRepository<CoachDecision> decisions) : IRequestHandler<GenerateWeeklyReviewRequest, GenerateWeeklyReviewResponse>
 {
     public async Task<GenerateWeeklyReviewResponse> Handle(GenerateWeeklyReviewRequest request, CancellationToken cancellationToken)

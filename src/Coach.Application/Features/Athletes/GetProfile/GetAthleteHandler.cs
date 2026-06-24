@@ -9,7 +9,7 @@ namespace Coach.Application.Features.Athletes.GetProfile;
 /// <summary>
 /// Handler for retrieving an athlete's profile.
 /// </summary>
-internal sealed class GetAthleteHandler(Ardalis.Specification.IReadRepositoryBase<Athlete> athletes) 
+internal sealed class GetAthleteHandler(IRepository<Athlete> athletes) 
     : IRequestHandler<GetAthleteRequest, ErrorOr<GetAthleteResponse>>
 {
     public async Task<ErrorOr<GetAthleteResponse>> Handle(

@@ -40,8 +40,8 @@ public enum FatigueRiskLevel
 /// Handler for checking fatigue risk.
 /// </summary>
 internal sealed class CheckFatigueRiskHandler(
-    Ardalis.Specification.IReadRepositoryBase<Activity> runs,
-    Ardalis.Specification.IReadRepositoryBase<HealthEntry> health,
+    IRepositoryBase<Activity> runs,
+    IRepositoryBase<HealthEntry> health,
     IRepository<CoachDecision> decisions) : IRequestHandler<CheckFatigueRiskRequest, CheckFatigueRiskResponse>
 {
     public async Task<CheckFatigueRiskResponse> Handle(CheckFatigueRiskRequest request, CancellationToken cancellationToken)

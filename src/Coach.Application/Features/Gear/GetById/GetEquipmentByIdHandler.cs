@@ -5,34 +5,28 @@ using Coach.Domain.Repositories;
 
 namespace Coach.Application.Features.Gear.GetById;
 
-internal sealed class GetEquipmentByIdHandler : IRequestHandler<GetEquipmentByIdRequest, ErrorOr<GetEquipmentByIdResponse>>
+internal sealed class GetEquipmentByIdHandler(IRepository<Equipment> equipment)
+    : IRequestHandler<GetEquipmentByIdRequest, ErrorOr<GetEquipmentByIdResponse>>
 {
-    private readonly Ardalis.Specification.IReadRepositoryBase<Equipment> _equipmentRepository;
-
-    public GetEquipmentByIdHandler(Ardalis.Specification.IReadRepositoryBase<Equipment> equipmentRepository)
-    {
-        _equipmentRepository = equipmentRepository;
-    }
-
     public async Task<ErrorOr<GetEquipmentByIdResponse>> Handle(GetEquipmentByIdRequest request, CancellationToken cancellationToken)
     {
-        var equipment = await _equipmentRepository.GetByIdAsync(request.EquipmentId, cancellationToken);
+        var equipment1 = await equipment.GetByIdAsync(request.EquipmentId, cancellationToken);
 
-        if (equipment == null)
+        if (equipment1 == null)
         {
             return Error.NotFound("Equipment.NotFound", $"Equipment with ID {request.EquipmentId} not found.");
         }
 
         return new GetEquipmentByIdResponse(
-            equipment.Id,
-            equipment.AthleteId,
-            equipment.Type,
-            equipment.Name,
-            equipment.Brand,
-            equipment.Model,
-            equipment.FirstUsedOn,
-            equipment.RetireAfterKm,
-            equipment.DistanceLoggedKm,
-            equipment.IsRetired);
+            equipment1.Id,
+            equipment1.AthleteId,
+            equipment1.Type,
+            equipment1.Name,
+            equipment1.Brand,
+            equipment1.Model,
+            equipment1.FirstUsedOn,
+            equipment1.RetireAfterKm,
+            equipment1.DistanceLoggedKm,
+            equipment1.IsRetired);
     }
 }

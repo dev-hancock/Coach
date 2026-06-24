@@ -10,7 +10,7 @@ namespace Coach.Api.Endpoints.Auth;
 
 public static class AuthModule
 {
-    public static IEndpointRouteBuilder MapCustomAuthEndpoints(this IEndpointRouteBuilder routes)
+    public static IEndpointRouteBuilder MapAuth(this IEndpointRouteBuilder routes)
     {
         var api = routes.MapGroup("/api/auth")
             .WithTags("Authentication");
